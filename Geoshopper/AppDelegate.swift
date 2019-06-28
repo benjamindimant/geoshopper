@@ -9,20 +9,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // Set up tabs
+        // Set up tab bar
         let mainTabBarController = MainTabBarController()
-        let mainNavigationController = MainNavigationController()
-        let secondaryViewController = SecondaryViewController()
-        mainNavigationController.title = "Navigation VC"
-        secondaryViewController.title = "Secondary VC"
         
+        // Set up tabs
+        let listViewController = ListViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        listViewController.title = "Items"
+        let locationsViewController = LocationsViewController()
+        locationsViewController.title = "Locations"
         
-        let mainViewController = MainViewController()
-        mainViewController.title = "Main VC"
-        
-        mainNavigationController.viewControllers = [mainViewController]
-        
-        mainTabBarController.viewControllers = [mainNavigationController, secondaryViewController]
+        mainTabBarController.viewControllers = [listViewController, locationsViewController]
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()

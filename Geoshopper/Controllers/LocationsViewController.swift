@@ -1,10 +1,10 @@
 import UIKit
 
-class DetailViewController: UIViewController {
+class LocationsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.purple
+        view.backgroundColor = .red
     }
     
 }
