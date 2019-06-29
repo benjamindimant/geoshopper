@@ -2,6 +2,8 @@ import UIKit
 
 class ListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
+    var tasks = ["Mayonnaise", "Toilet Paper", "Olives"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let systemFontAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0)]
@@ -13,13 +15,14 @@ class ListViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView?.register(TaskHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
     }
     
+    // For cells
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return tasks.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let taskCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! TaskCell
-        taskCell.nameLabel.text = "Sample Task \(indexPath.item)"
+        taskCell.nameLabel.text = tasks[indexPath.item]
         return taskCell
     }
     
@@ -27,12 +30,20 @@ class ListViewController: UICollectionViewController, UICollectionViewDelegateFl
         return CGSize(width: view.frame.width, height: 50)
     }
 
+    // For header
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! TaskHeader
+        header.viewController = self
+        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 100)
+    }
+    
+    func addTask(taskName: String) {
+        tasks.append(taskName)
+        collectionView?.reloadData()
     }
 
 }

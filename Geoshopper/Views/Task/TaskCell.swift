@@ -5,7 +5,7 @@ class TaskCell: BaseCell {
         let label = UILabel()
         label.text = "Sample Task"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
     }()
     

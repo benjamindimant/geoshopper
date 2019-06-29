@@ -8,11 +8,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        // Set up tab bar
-        let mainTabBarController = MainTabBarController()
-        
+
         // Set up tabs
+        let mainTabBarController = UITabBarController()
         let listViewController = ListViewController(collectionViewLayout: UICollectionViewFlowLayout())
         listViewController.title = "Items"
         let locationsViewController = LocationsViewController()
