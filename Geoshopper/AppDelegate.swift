@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set up tabs
         let mainTabBarController = UITabBarController()
-        let listViewController = ListViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let listViewController = ListViewController()
         listViewController.title = "Items"
         let locationsViewController = LocationsViewController()
         locationsViewController.title = "Locations"

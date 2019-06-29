@@ -1,49 +1,62 @@
 import UIKit
 
-class ListViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ListViewController: UIViewController {
     
-    var tasks = ["Mayonnaise", "Toilet Paper", "Olives"]
+    lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(TaskViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 4, right: 0)
+        collectionView.backgroundColor = UIColor(white: 0.97, alpha: 1)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        return collectionView
+    }()
+    
+    let cellIdentifier = "cell"
+    
+    var items: [String] = {
+        var items = [String]()
+        for i in 1 ..< 20 {
+            items.append("Item \(i)")
+        }
+        return items
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let systemFontAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0)]
-        UITabBarItem.appearance().setTitleTextAttributes(systemFontAttributes, for: .normal)
-        UITabBarItem.appearance().setTitleTextAttributes(systemFontAttributes, for: .selected)
-        collectionView?.backgroundColor = .white
-        collectionView?.alwaysBounceVertical = true
-        collectionView?.register(TaskCell.self, forCellWithReuseIdentifier: "cellId")
-        collectionView?.register(TaskHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
+        view.addSubview(collectionView)
+        collectionView.pinEdgesToSuperView()
     }
-    
-    // For cells
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tasks.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let taskCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! TaskCell
-        taskCell.nameLabel.text = tasks[indexPath.item]
-        return taskCell
-    }
-    
+}
+
+extension ListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
+        return CGSize(width: collectionView.frame.width, height: 80)
     }
+}
 
-    // For header
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! TaskHeader
-        header.viewController = self
-        return header
+extension ListViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 100)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! TaskViewCell
+        cell.itemNameLabel.text = items[indexPath.item]
+        cell.delegate = self
+        return cell
     }
-    
-    func addTask(taskName: String) {
-        tasks.append(taskName)
-        collectionView?.reloadData()
-    }
+}
 
+extension ListViewController: SwipeableCollectionViewCellDelegate {
+    func hiddenContainerViewTapped(inCell cell: UICollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        items.remove(at: indexPath.item)
+        collectionView.performBatchUpdates({
+            self.collectionView.deleteItems(at: [indexPath])
+        })
+    }
 }

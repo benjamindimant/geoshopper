@@ -21,3 +21,6 @@ DerivedData/
 ## Xcode Patch
 *.xcodeproj/*
 /*.gcno
+
+# macOS
+.DS_Store
